@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GST Calculator</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #e3f2fd;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .calc-box {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(25, 118, 210, 0.2);
+            width: 100%;
+            max-width: 380px;
+        }
+        h2 {
+            text-align: center;
+            color: #1565c0;
+            margin-bottom: 25px;
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+        label {
+            display: block;
+            margin: 15px 0 8px;
+            font-weight: 600;
+            color: #0d47a1;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid #90caf9;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #f5fbff;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #1976d2;
+            background: white;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            background: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #1565c0;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f5e8;
+            border-radius: 8px;
+            border-left: 4px solid #4caf50;
+            display: none;
+        }
+        .result p {
+            margin: 8px 0;
+            font-size: 1.05rem;
+        }
+        .result strong {
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <div class="calc-box">
+        <h2>GST Calculator</h2>
+
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" placeholder="0" min="0">
+
+        <label for="gstRate">GST (%):</label>
+        <select id="gstRate">
+            <option value="">Select GST</option>
+            <option value="5">5%</option>
+            <option value="12">12%</option>
+            <option value="18" selected>18%</option>
+            <option value="28">28%</option>
+        </select>
+
+        <div class="result" id="result">
+            <p>Actual Amount: <strong id="actualAmt">0.00</strong></p>
+            <p>GST: <strong id="gstAmt">0.00</strong></p>
+            <p>Total: <strong id="totalAmt">0.00</strong></p>
+        </div>
+
+        <button id="resetBtn">Reset</button>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Function to calculate GST
+            function calculateGST() {
+                let amount = parseFloat($('#amount').val());
+                let rate = parseFloat($('#gstRate').val());
+
+                if (isNaN(amount) || amount <= 0 || !rate) {
+                    $('#result').hide();
+                    return;
+                }
+
+                let gst = (amount * rate) / 100;
+                let total = amount + gst;
+
+                $('#actualAmt').text(amount.toFixed(2));
+                $('#gstAmt').text(gst.toFixed(2));
+                $('#totalAmt').text(total.toFixed(2));
+
+                $('#result').fadeIn(400);
+            }
+
+            // Auto calculate on input
+            $('#amount, #gstRate').on('input change', function() {
+                calculateGST();
+            });
+
+            // Reset button
+            $('#resetBtn').click(function() {
+                $('#amount').val('');
+                $('#gstRate').val('');
+                $('#result').fadeOut(300);
+            });
+
+            // Initial hide
+            $('#result').hide();
+        });
+    </script>
+</body>
+</html>
